@@ -19,17 +19,16 @@ node {
 
         stage('Image') {
             dir ('account-service') {
-                def app = docker.build "localhost:5000/account-service:${env.version}"
-                app.push()
+                def app = docker.build "naveengoswami/account-service:${env.version}"
             }
         }
 
         stage ('Run') {
-            docker.image("localhost:5000/account-service:${env.version}").run('-p 2222:2222 -h account --name account --link discovery')
+            docker.image("naveengoswami/account-service:${env.version}").run('-p 2222:2222 -h account --name account --link discovery')
         }
 
         stage ('Final') {
-            build job: 'customer-service-pipeline', wait: false
+            build job: 'customer-service', wait: false
         }      
 
     }
